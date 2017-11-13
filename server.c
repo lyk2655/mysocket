@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>        		/* for exit		*/
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <string.h>
+#include"socket.h"
 /*********** server ************/ 
 #define SOCKET_ERROR -1
 #define Encrypt 0
@@ -59,11 +53,13 @@ void main(int argc ,char **argv)
 	unsigned char sendbuf[32] = "listenfd: Sending Data."; 
 	unsigned char recvbuf[1000] = ""; 
 	unsigned char desRecBuf[1000];
-	unsigned char *key=argv[2];
+	unsigned char *key = "12345678";
 	int count=0;
-	while(recv( listenfd, recvbuf, 14, 0)>0)
+	while(recv( listenfd, recvbuf, sizeof(T), 0)>0)
 	{ 
 		printf("no.%d:%s\n",count,recvbuf);
+		DesAlg(key, recvbuf, desRecBuf, Encrypt);
+		printf("recvbuf:%s\n",desRecBuf);
 		count++;		
 	}
 	/*DesAlg(key, recvbuf, desRecBuf, Encrypt);

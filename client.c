@@ -1,22 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <string.h>
-
-#define BUF_SIZE 			20*1024
-
-int k = 0;
-/* 报文头结构 */
-typedef struct _tabscale
-{
-        char Size[4];
-        char txncode[6];
-        char seqno[4];
-}T;
-
+#include"socket.h"
+#define Encrypt 1
 char 	TargetIP[ BUF_SIZE ]={0};			/*  要连接的服务器IP		*/
 int 	TargetPort;					        /*  要连接的服务器端口		*/
 
@@ -56,27 +39,38 @@ int init()
 /* 设置报文头  */
 void SetData(T *data,char *code,int len)
 {
+        printf("A---------SetData-------------\n");
 	T t;
 	memset(&t,' ',sizeof(t));
-
+        unsigned char recvbuf[1000] = ""; 
+	unsigned char desRecBuf[1000];
+         printf("A---------key-------------\n");
+        unsigned char *key = "12345678";
+        printf("A---------keykkk-------------\n");
 	strncpy(t.Size,		"0524",			sizeof(t.Size));
 	strncpy(t.txncode,	code,			strlen(code));
 	if(k == 1)
 	{
-		strncpy(t.seqno,	"2AA",	sizeof(t.seqno));
+		strncpy(t.seqno,	"2AADDDDDDDDDDDDD",	sizeof(t.seqno));
 		k = 0;
 	}
 	else 
 	{
-		strncpy(t.seqno,	"2BB",	sizeof(t.seqno));
+		strncpy(t.seqno,	"2BBCCCCCC",	sizeof(t.seqno));
 		k = 1;
 	}
-	memcpy(data,&t,sizeof(t));
+        printf("A----------------------\n");
+        memcpy(recvbuf,&t,sizeof(t));
+        printf("buf:%s\n",recvbuf);
+        DesAlg(key, recvbuf, desRecBuf, Encrypt);
+	printf("des:%s\n",desRecBuf);
+	memcpy(data,desRecBuf,sizeof(t));
 }
 
 /* 发送报文 */
 int SendData(int sock,char *code,char *data,int datalen)
 {
+        printf("A---------SendData-------------\n");
 	int iRet;
 	if(sock < 0){ return -1;}
 	T t;
@@ -105,6 +99,7 @@ int SendData(int sock,char *code,char *data,int datalen)
 			return -1;
 		} 
 	}
+        printf("A---------SendData end-------------\n");
 	return 0;
 }
 
