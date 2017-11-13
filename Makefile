@@ -1,4 +1,4 @@
 client:client.c
-	cc -c client.c -o client
+	cc client.c -o client
 server:server.c
-	cc -c serve.c -o server
+	cc server.c -o server
