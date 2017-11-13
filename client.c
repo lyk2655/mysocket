@@ -115,7 +115,7 @@ int main(int argc ,char **argv)
 	TargetPort=atoi("1118");				/* 设置连接的端口			*/
 	int sock=init();
 	int i = 0;
-	while(i++ < 100)
+	while(i++ < 1000)
 	{
 		if ( SendData(sock,"111111",NULL,0) != 0 )
 		{

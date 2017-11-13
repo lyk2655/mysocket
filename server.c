@@ -53,17 +53,16 @@ void main(int argc ,char **argv)
 		printf( "Client Connected. \n"); 
 		listenfd = AcceptSocket; 
 		break; 
-	} 
+	}
 	int iSent; 
 	int iRecv = SOCKET_ERROR; 
 	unsigned char sendbuf[32] = "listenfd: Sending Data."; 
-	unsigned char recvbuf[14] = ""; 
+	unsigned char recvbuf[1000] = ""; 
 	unsigned char desRecBuf[1000];
 	unsigned char *key=argv[2];
 	int count=0;
-	while(recv( listenfd, recvbuf, sizeof(recvbuf), 0)>0)
+	while(recv( listenfd, recvbuf, 14, 0)>0)
 	{ 
-		recvbuf[13]='\0';
 		printf("no.%d:%s\n",count,recvbuf);
 		count++;		
 	}
